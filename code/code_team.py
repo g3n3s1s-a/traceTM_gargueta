@@ -44,58 +44,59 @@ def simulate_ntm(machine, max_depth=None):
     total_transitions = 0
     non_leaves = 0
     transition_log = []
+    current_depth = 0
 
-    for depth in range(max_depth or float('inf')):
-        current_level = tree[-1]
+    while tree:
+        current_level = tree.pop(0)
         next_level = []
+        print(f"Depth {current_depth}, Current Level: {len(current_level)} configurations")
 
         for state, tape, head_pos in current_level:
             if state == accept_state:
-                print(f"String accepted in {depth} steps.")
+                print(f"String accepted in {current_depth} steps.")
                 print(f"Level of nondeterminism: {total_transitions / (non_leaves or 1):.2f}")
                 print("Transition Log:")
                 for log in transition_log:
                     print(log)
-                return True
+                return current_depth
+
             if state == reject_state:
-                print("rejected")
                 continue
-            
+
             head_char = tape[head_pos] if 0 <= head_pos < len(tape) else '_'
             possible_transitions = transitions.get((state, head_char), [])
-            
-            # Track nondeterministic nodes
+
             if len(possible_transitions) > 1:
                 non_leaves += 1
-            
+
             for next_state, write_char, move_dir in possible_transitions:
                 new_tape = list(tape)
                 if 0 <= head_pos < len(new_tape):
                     new_tape[head_pos] = write_char
                 else:
                     new_tape.append(write_char)
-                
+
                 new_head_pos = head_pos + (1 if move_dir == 'R' else -1)
                 next_config = (next_state, ''.join(new_tape), new_head_pos)
                 next_level.append(next_config)
 
-                # Log transition
                 transition_log.append(
                     f"({state}, {head_char}) -> ({next_state}, {write_char}, {move_dir})"
                 )
 
             total_transitions += len(possible_transitions)
-        
-        if not next_level:
-            print(f"String rejected in {depth} steps.")
+
+        if next_level:
+            tree.extend([next_level])
+            current_depth += 1
+        else:
+            print(f"String rejected in {current_depth} steps.")
             print(f"Level of nondeterminism: {total_transitions / (non_leaves or 1):.2f}")
             print("Transition Log:")
             for log in transition_log:
                 print(log)
             return False
-        
-        tree.append(next_level)
-    
+
     print(f"Execution stopped after reaching max depth of {max_depth}.")
     print(f"Level of nondeterminism: {total_transitions / (non_leaves or 1):.2f}")
     print("Transition Log:")
@@ -109,5 +110,5 @@ machine_file = f'test/{machine_file}'
 max_depth = 20
 
 machine = parse_csv(machine_file)
-simulate_ntm(machine,max_depth)
-
+result = simulate_ntm(machine, max_depth)
+print(f"Solution depth: {result}")
