@@ -101,8 +101,8 @@ def simulate_ntm(machine, input_string, max_depth=None):
     return None
 
 # Example Usage
-machine_file = 'test/a_plus.csv'
-input_string = 'aaaa'
+machine_file = 'test/aa_plus_bb.csv'
+input_string = 'a'
 max_depth = 20
 
 machine = parse_csv(machine_file)
