@@ -1,0 +1,13 @@
+one plus zero
+10011
+q1,q2,q3,q4
+1,0
+1,0,_
+q1
+q4
+qreject
+q1,1,q2,1,R
+q2,1,q2,1,R
+q2,0,q2,0,R
+q2,0,q3,0,R
+q3,_,q4,_,L
