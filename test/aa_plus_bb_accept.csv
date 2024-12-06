@@ -1,0 +1,17 @@
+aa plus bb
+aaabb
+q1,q2,q3,q4,qacc
+a,b
+a,b,_
+q1
+qacc
+qreject
+q1,a,q1,a,R
+q1,b,q1,b,R
+q1,a,q3,a,R
+q1,b,q2,b,R
+q3,a,q5,a,R
+q2,b,q5,b,R
+q5,a,q5,a,R
+q5,b,q5,b,R
+q5,_,qacc,_,L
