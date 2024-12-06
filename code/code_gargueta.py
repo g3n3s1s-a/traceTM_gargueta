@@ -29,13 +29,12 @@ def parse_csv(file_path):
         'accept_state': accept_state,
         'reject_state': reject_state,
         'transitions': transitions,
-        'string_read':string_read
+        'string_read': string_read  # list of strings to process
     }
 
-def simulate_ntm(machine, max_depth=None):
-    input_string = machine['string_read']
+def simulate_ntm(machine, input_string, max_depth=None):
     print(f'Running machine -  {machine["name"]}\nstring -  {input_string}')
-    start_config = (machine['start_state'], machine['string_read'], 0)  # (state, tape, head_pos)
+    start_config = (machine['start_state'], input_string, 0)  # (state, tape, head_pos)
     tree = [[start_config]]
     transitions = machine['transitions']
     accept_state = machine['accept_state']
@@ -105,10 +104,15 @@ def simulate_ntm(machine, max_depth=None):
     return None
 
 # Example Usage
-machine_file = input('what test file would you like to run?\n')
+machine_file = input('What test file would you like to run?\n')
 machine_file = f'test/{machine_file}'
 max_depth = 20
 
 machine = parse_csv(machine_file)
-result = simulate_ntm(machine, max_depth)
-print(f"Solution depth: {result}")
+string = machine['string_read']
+
+# Iterate over each string and simulate
+print(f"Running simulation for: {string}")
+result = simulate_ntm(machine, string, max_depth)
+print(f"Solution depth for string '{string}': {result}")
+
