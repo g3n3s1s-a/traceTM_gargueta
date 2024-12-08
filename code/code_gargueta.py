@@ -42,6 +42,9 @@ def simulate_ntm(machine, input_string, max_depth=None):
 
     total_transitions = 0
     non_leaves = 0
+    total_configurations = 0
+    accepted_configurations = 0
+    rejected_configurations = 0
     transition_log = []
     current_depth = 0
 
@@ -51,15 +54,22 @@ def simulate_ntm(machine, input_string, max_depth=None):
         print(f"Depth {current_depth}, Current Level: {len(current_level)} configurations")
 
         for state, tape, head_pos in current_level:
+            total_configurations += 1  # Increment for each configuration processed
+
             if state == accept_state:
+                accepted_configurations += 1
                 print(f"String accepted in {current_depth} steps.")
                 print(f"Level of nondeterminism: {total_transitions / (non_leaves or 1):.2f}")
+                print(f"Configurations explored: {total_configurations}")
+                print(f"Accepted configurations: {accepted_configurations}")
+                print(f"Rejected configurations: {rejected_configurations}")
                 print("Transition Log:")
                 for log in transition_log:
                     print(log)
                 return current_depth
 
             if state == reject_state:
+                rejected_configurations += 1
                 continue
 
             head_char = tape[head_pos] if 0 <= head_pos < len(tape) else '_'
@@ -91,6 +101,9 @@ def simulate_ntm(machine, input_string, max_depth=None):
         else:
             print(f"String rejected in {current_depth} steps.")
             print(f"Level of nondeterminism: {total_transitions / (non_leaves or 1):.2f}")
+            print(f"Configurations explored: {total_configurations}")
+            print(f"Accepted configurations: {accepted_configurations}")
+            print(f"Rejected configurations: {rejected_configurations}")
             print("Transition Log:")
             for log in transition_log:
                 print(log)
@@ -98,6 +111,9 @@ def simulate_ntm(machine, input_string, max_depth=None):
 
     print(f"Execution stopped after reaching max depth of {max_depth}.")
     print(f"Level of nondeterminism: {total_transitions / (non_leaves or 1):.2f}")
+    print(f"Configurations explored: {total_configurations}")
+    print(f"Accepted configurations: {accepted_configurations}")
+    print(f"Rejected configurations: {rejected_configurations}")
     print("Transition Log:")
     for log in transition_log:
         print(log)
@@ -115,4 +131,3 @@ string = machine['string_read']
 print(f"Running simulation for: {string}")
 result = simulate_ntm(machine, string, max_depth)
 print(f"Solution depth for string '{string}': {result}")
-
